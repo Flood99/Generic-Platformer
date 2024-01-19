@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpdY;
     private bool isOnGround = false;
     private int jumps;
+    bool jumpPressed;
    
     Vector2 velocity; 
     private Rigidbody2D rb;
@@ -39,8 +40,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.DrawRay(transform.position,Vector3.left*100,Color.red);
-        bool jumpPressed = Input.GetButtonDown("Jump");
+      
+        jumpPressed = Input.GetButtonDown("Jump");
         //State Machine
         switch(currentState)
         {
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour
         
         
         
+        
         //limit x speed
         if(Mathf.Abs(rb.velocity.x) > maxSpdX)
         {
@@ -130,14 +132,17 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(rb.velocity.x,Mathf.Sign(rb.velocity.y) * maxSpdX);
         }
-        Debug.Log(rb.velocity.magnitude);
+      //  Debug.Log(rb.velocity.magnitude);
 
     }
     void CheckWall()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position,Vector2.left,10);
+        LayerMask mask = LayerMask.GetMask("Walls");
+        RaycastHit2D hit = Physics2D.Raycast(transform.position,Vector2.left,1.1f,mask);
+        if(hit.collider !=null) Debug.Log("Hit");
        
         
+        Debug.DrawRay(transform.position, Vector3.left*0.6f, Color.green);
     }
     
 }
